@@ -1,5 +1,28 @@
 <main class="grid min-h-screen place-items-center bg-slate-50 px-6 py-12">
   <div class="w-full max-w-3xl text-center">
+    <nav class="mb-8 flex items-center justify-end gap-3 text-sm">
+      <% if user_signed_in? %>
+        <span class="text-slate-600">
+          <%= current_user.email %>
+        </span>
+
+        <%= button_to "로그아웃",
+              destroy_user_session_path,
+              method: :delete,
+              class: "rounded-lg bg-slate-900 px-4 py-2 font-medium text-white hover:bg-slate-
+              700" %>
+      <% else %>
+        <%= link_to "로그인",
+              new_user_session_path,
+              class: "font-medium text-slate-600 hover:text-slate-900" %>
+
+        <%= link_to "회원가입",
+              new_user_registration_path,
+              class: "rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-
+              indigo-500" %>
+      <% end %>
+    </nav>
+
     <header class="mb-10">
       <p class="mb-2 text-sm font-semibold text-indigo-600">
         HJMemo
