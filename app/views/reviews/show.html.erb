@@ -1,0 +1,57 @@
+<main class="min-h-screen bg-slate-50 px-6 py-12">
+  <div class="mx-auto max-w-3xl">
+    <%= link_to "← 주제 목록",
+          topics_path,
+          class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+
+    <header class="mb-8 mt-6">
+      <h1 class="text-3xl font-bold text-slate-900">
+        오늘의 복습
+      </h1>
+    </header>
+
+    <% if @note %>
+      <article class="rounded-2xl bg-white p-6 shadow-sm">
+        <p class="text-sm font-semibold text-indigo-600">
+          <%= @note.topic.name %>
+        </p>
+
+        <p class="mt-6 text-sm font-medium text-slate-500">
+          질문
+        </p>
+
+        <h2 class="mt-2 whitespace-pre-wrap text-xl font-semibold text-slate-900"><%= @note.question %></h2>
+
+        <details class="mt-8 border-t border-slate-100 pt-6">
+          <summary class="cursor-pointer font-semibold text-indigo-600">
+            답 보기
+          </summary>
+
+          <div class="mt-5">
+            <p class="whitespace-pre-wrap text-slate-700"><%= @note.answer %></p>
+
+            <% if @note.answer_images.attached? %>
+              <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                <% @note.answer_images.each do |image| %>
+                  <%= image_tag image,
+                        alt: "답변 첨부 이미지",
+                        class: "w-full rounded-xl border border-slate-200 object-contain" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </details>
+      </article>
+    <% else %>
+      <section class="rounded-2xl bg-white p-10 text-center shadow-sm">
+        <p class="text-lg font-semibold text-slate-900">
+          지금 복습할 메모가 없습니다.
+        </p>
+
+        <p class="mt-2 text-slate-600">
+          새로운 메모를 만들거나 다음 복습 시간을 기다려 주세요.
+        </p>
+      </section>
+    <% end %>
+  </div>
+</main>
