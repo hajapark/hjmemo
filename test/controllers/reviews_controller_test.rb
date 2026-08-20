@@ -44,4 +44,56 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "p", text: "지금 복습할 메모가 없습니다."
   end
+
+  test "saves a review rating and redirects to the next review" do
+    sign_in @user
+
+    patch review_url, params: {
+      note_id: @note.id,
+      rating: "good"
+    }
+
+    assert_redirected_to review_url
+
+    @note.reload
+    assert_equal 1, @note.repetitions
+    assert_equal 1, @note.review_interval_days
+    assert @note.next_review_at.future?
+  end
+
+  test "does not allow reviewing another user's note" do
+    other_user = User.create!(
+      email: "other-rating@example.com",
+      password: "password123"
+    )
+    other_topic = other_user.topics.create!(name: "Private rating")
+    other_note = other_topic.notes.create!(
+      question: "비공개 질문",
+      answer: "비공개 답변"
+    )
+
+    sign_in @user
+
+    patch review_url, params: {
+      note_id: other_note.id,
+      rating: "good"
+    }
+
+    assert_response :not_found
+    assert_equal 0, other_note.reload.repetitions
+  end
+
+  test "does not change a note for an unsupported rating" do
+    sign_in @user
+
+    assert_no_changes -> { @note.reload.attributes } do
+      patch review_url, params: {
+        note_id: @note.id,
+        rating: "unknown"
+      }
+    end
+
+    assert_redirected_to review_url
+    assert_equal "지원하지 않는 복습 평가입니다.", flash[:alert]
+  end
 end

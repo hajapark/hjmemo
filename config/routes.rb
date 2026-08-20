@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     resources :notes, only: %i[index new create edit update destroy]
   end
 
-  resource :review, only: :show
+  resource :review, only: %i[show update]
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
