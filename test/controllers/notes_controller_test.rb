@@ -30,6 +30,31 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     assert_select "h2", text: /Ruby는 무엇인가요?/
   end
 
+  test "shows the next review time in Seoul time" do
+    travel_to Time.zone.local(2026, 8, 20, 15, 0) do
+      @note.update!(next_review_at: 1.day.from_now)
+      sign_in @user
+
+      get topic_notes_url(@topic)
+
+      assert_response :success
+      assert_select "time[datetime=?]",
+        @note.reload.next_review_at.iso8601,
+        text: "2026년 8월 21일 15:00"
+      assert_select "span", text: "지금 복습 가능", count: 0
+    end
+  end
+
+  test "marks a due note as available for review" do
+    @note.update!(next_review_at: 1.minute.ago)
+    sign_in @user
+
+    get topic_notes_url(@topic)
+
+    assert_response :success
+    assert_select "span", text: "지금 복습 가능"
+  end
+
   test "allows signed-in user to open the new note form" do
     sign_in @user
 
