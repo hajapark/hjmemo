@@ -1,6 +1,8 @@
 class Topic < ApplicationRecord
   belongs_to :user
 
+  has_many :notes, dependent: :destroy
+
   normalizes :name, with: ->(name) { name.strip }
 
   validates :name,

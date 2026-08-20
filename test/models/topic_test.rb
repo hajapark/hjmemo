@@ -28,4 +28,13 @@ class TopicTest < ActiveSupport::TestCase
 
     assert_equal "Rails", topic.name
   end
+
+  test "destroys its notes when destroyed" do
+    topic = topics(:ruby)
+    note_count = topic.notes.count
+
+    assert_difference("Note.count", -note_count) do
+      topic.destroy!
+    end
+  end
 end

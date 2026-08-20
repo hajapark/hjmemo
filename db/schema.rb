@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_19_145012) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_20_130226) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "notes", force: :cascade do |t|
+    t.text "answer", null: false
+    t.datetime "created_at", null: false
+    t.text "question", null: false
+    t.bigint "topic_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["topic_id"], name: "index_notes_on_topic_id"
+  end
 
   create_table "topics", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -35,5 +44,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_19_145012) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "notes", "topics"
   add_foreign_key "topics", "users"
 end
