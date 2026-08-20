@@ -1,0 +1,45 @@
+<main class="min-h-screen bg-slate-50 px-6 py-12">
+  <div class="mx-auto max-w-2xl">
+    <%= link_to "← 메모 목록",
+          topic_notes_path(@topic),
+          class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+
+    <header class="mb-8 mt-6">
+      <p class="text-sm font-semibold text-indigo-600">
+        <%= @topic.name %>
+      </p>
+
+      <h1 class="mt-2 text-3xl font-bold text-slate-900">
+        메모 수정
+      </h1>
+
+      <p class="mt-2 text-slate-600">
+        질문과 답변을 수정하세요.
+      </p>
+    </header>
+
+    <% if @note.answer_images.attached? %>
+      <section class="mb-6 rounded-2xl bg-white p-6 shadow-sm">
+        <p class="text-sm font-medium text-slate-700">
+          현재 답변 이미지
+        </p>
+
+        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+          <% @note.answer_images.each do |image| %>
+            <%= image_tag image,
+                  alt: "현재 답변 이미지",
+                  class: "w-full rounded-xl border border-slate-200 object-contain" %>
+          <% end %>
+        </div>
+
+        <p class="mt-4 text-sm text-slate-500">
+          새 이미지를 선택하지 않으면 현재 이미지가 유지됩니다. 새 이미지를 선택하면 현재 이미지 전체를 교체합니다.
+        </p>
+      </section>
+    <% end %>
+
+    <section class="rounded-2xl bg-white p-8 shadow-sm">
+      <%= render "form", topic: @topic, note: @note %>
+    </section>
+  </div>
+</main>

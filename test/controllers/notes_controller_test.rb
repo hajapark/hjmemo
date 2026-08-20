@@ -6,6 +6,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:one)
     @topic = topics(:ruby)
+    @note = notes(:ruby_question)
 
     @other_user = User.create!(
       email: "other-notes@example.com",
@@ -118,5 +119,123 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :not_found
+  end
+
+  test "allows signed-in user to edit a note" do
+    sign_in @user
+
+    get edit_topic_note_url(@topic, @note)
+
+    assert_response :success
+  end
+
+  test "updates a note" do
+    sign_in @user
+
+    patch topic_note_url(@topic, @note), params: {
+      note: {
+        question: "수정된 질문",
+        answer: "수정된 답변"
+      }
+    }
+
+    assert_redirected_to topic_notes_url(@topic)
+
+    @note.reload
+    assert_equal "수정된 질문", @note.question
+    assert_equal "수정된 답변", @note.answer
+  end
+
+  test "keeps existing images when no new image is submitted" do
+    @note.answer_images.attach(
+      io: StringIO.new("existing image"),
+      filename: "existing.png",
+      content_type: "image/png"
+    )
+
+    sign_in @user
+
+    patch topic_note_url(@topic, @note), params: {
+      note: {
+        question: "이미지를 유지하는 질문",
+        answer: "이미지를 유지하는 답변"
+      }
+    }
+
+    assert_redirected_to topic_notes_url(@topic)
+
+    filenames = @note.reload.answer_images.map do |image|
+      image.filename.to_s
+    end
+
+    assert_equal ["existing.png"], filenames
+  end
+
+  test "does not update a note with invalid values" do
+    sign_in @user
+
+    patch topic_note_url(@topic, @note), params: {
+      note: {
+        question: "",
+        answer: ""
+      }
+    }
+
+    assert_response :unprocessable_content
+
+    @note.reload
+    assert_equal "Ruby는 무엇인가요?", @note.question
+    assert_equal "Ruby는 객체 지향 프로그래밍 언어입니다.", @note.answer
+  end
+
+  test "deletes a note and its image attachment" do
+    @note.answer_images.attach(
+      io: StringIO.new("image data"),
+      filename: "delete.png",
+      content_type: "image/png"
+    )
+
+    sign_in @user
+
+    assert_difference("Note.count", -1) do
+      assert_difference("ActiveStorage::Attachment.count", -1) do
+        delete topic_note_url(@topic, @note)
+      end
+    end
+
+    assert_redirected_to topic_notes_url(@topic)
+  end
+
+  test "replaces existing images when new images are submitted" do
+    @note.answer_images.attach(
+      io: StringIO.new("existing image"),
+      filename: "existing.png",
+      content_type: "image/png"
+    )
+
+    replacement = Rack::Test::UploadedFile.new(
+      StringIO.new("replacement image"),
+      "image/png",
+      false,
+      original_filename: "replacement.png"
+    )
+
+    sign_in @user
+
+    patch topic_note_url(@topic, @note), params: {
+      note: {
+        question: @note.question,
+        answer: @note.answer,
+        answer_images: [replacement]
+      }
+    }
+
+    assert_redirected_to topic_notes_url(@topic)
+
+    filenames = @note.reload.answer_images.map do |image|
+      image.filename.to_s
+    end
+
+    assert_equal ["replacement.png"], filenames
   end
 end

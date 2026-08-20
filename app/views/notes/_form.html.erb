@@ -38,6 +38,7 @@
 
     <%= form.file_field :answer_images,
           multiple: true,
+          include_hidden: false,
           accept: "image/jpeg,image/png,image/webp",
           class: "block w-full text-sm text-slate-600" %>
 
@@ -51,7 +52,9 @@
           topic_notes_path(topic),
           class: "rounded-lg px-4 py-2 font-medium text-slate-600 hover:bg-slate-100" %>
 
-    <%= form.submit "메모 만들기",
-          class: "cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
+    <%= form.submit(
+          note.persisted? ? "메모 수정하기" : "메모 만들기",
+          class: "cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500"
+        ) %>
   </div>
 <% end %>

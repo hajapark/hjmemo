@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root "home#index"
 
   resources :topics, only: %i[index new create edit update destroy] do
-    resources :notes, only: %i[index new create]
+    resources :notes, only: %i[index new create edit update destroy]
   end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
