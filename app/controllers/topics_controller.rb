@@ -47,6 +47,6 @@ class TopicsController < ApplicationController
   end
 
   def topic_params
-    params.expect(topic: [:name])
+    params.expect(topic: [ :name ])
   end
 end

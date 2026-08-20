@@ -1,8 +1,8 @@
 <main class="grid min-h-screen place-items-center bg-slate-50 px-6 py-12">
   <div class="w-full max-w-3xl text-center">
-    <nav class="mb-8 flex items-center justify-end gap-3 text-sm">
+    <nav class="mb-8 flex flex-wrap items-center justify-end gap-3 text-sm">
       <% if user_signed_in? %>
-        <span class="text-slate-600">
+        <span class="break-all text-slate-600">
           <%= current_user.email %>
         </span>
 
@@ -26,7 +26,7 @@
         HJMemo
       </p>
 
-      <h1 class="text-4xl font-bold tracking-tight text-slate-900">
+      <h1 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
         기억하고 싶은 내용을 꾸준히 복습하세요
       </h1>
 

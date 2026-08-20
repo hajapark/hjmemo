@@ -1,0 +1,15 @@
+<div class="mt-6 space-y-2 text-center text-sm">
+  <% if controller_name != "sessions" %>
+    <p>
+      이미 계정이 있나요?
+      <%= link_to "로그인", new_session_path(resource_name), class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+    </p>
+  <% end %>
+
+  <% if devise_mapping.registerable? && controller_name != "registrations" %>
+    <p>
+      계정이 없나요?
+      <%= link_to "회원가입", new_registration_path(resource_name), class: "font-semibold text-indigo-600 hover:text-indigo-500" %>
+    </p>
+  <% end %>
+</div>

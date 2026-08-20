@@ -1,0 +1,11 @@
+<% if resource.errors.any? %>
+  <div class="rounded-xl bg-red-50 p-4 text-sm text-red-700">
+    <p class="font-semibold">입력 내용을 확인해 주세요.</p>
+
+    <ul class="mt-2 list-inside list-disc">
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

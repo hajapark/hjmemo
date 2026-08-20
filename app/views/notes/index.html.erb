@@ -4,7 +4,7 @@
           topics_path,
           class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
 
-    <header class="mb-8 mt-6 flex items-end justify-between gap-4">
+    <header class="mb-8 mt-6 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-end">
       <div>
         <p class="text-sm font-semibold text-indigo-600">
           <%= @topic.name %>
@@ -21,7 +21,7 @@
 
       <%= link_to "새 메모",
             new_topic_note_path(@topic),
-            class: "rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
+            class: "self-end rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
     </header>
 
     <% if @notes.any? %>
@@ -50,7 +50,7 @@
               </div>
             </div>
 
-            <h2 class="mt-2 whitespace-pre-wrap text-lg font-semibold text-slate-900"><%= note.question %></h2>
+            <h2 class="mt-2 break-words whitespace-pre-wrap text-lg font-semibold text-slate-900"><%= note.question %></h2>
 
             <div class="mt-4 flex flex-wrap items-center gap-2 text-sm">
               <span class="font-medium text-slate-500">
@@ -75,7 +75,7 @@
                 답변
               </p>
 
-              <p class="mt-2 whitespace-pre-wrap text-slate-700"><%= note.answer %></p>
+              <p class="mt-2 break-words whitespace-pre-wrap text-slate-700"><%= note.answer %></p>
 
               <% if note.answer_images.attached? %>
                 <div class="mt-5 grid gap-4 sm:grid-cols-2">

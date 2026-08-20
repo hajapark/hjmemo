@@ -39,7 +39,7 @@ class ReviewsController < ApplicationController
         rating: rating
       ).next_review_delay
 
-      [rating, delay]
+      [ rating, delay ]
     end
   end
 end

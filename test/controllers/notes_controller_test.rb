@@ -111,7 +111,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
         note: {
           question: "이미지가 있는 질문",
           answer: "텍스트와 이미지를 함께 저장합니다.",
-          answer_images: [image]
+          answer_images: [ image ]
         }
       }
     end
@@ -193,7 +193,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
       image.filename.to_s
     end
 
-    assert_equal ["existing.png"], filenames
+    assert_equal [ "existing.png" ], filenames
   end
 
   test "does not update a note with invalid values" do
@@ -251,7 +251,7 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
       note: {
         question: @note.question,
         answer: @note.answer,
-        answer_images: [replacement]
+        answer_images: [ replacement ]
       }
     }
 
@@ -261,6 +261,6 @@ class NotesControllerTest < ActionDispatch::IntegrationTest
       image.filename.to_s
     end
 
-    assert_equal ["replacement.png"], filenames
+    assert_equal [ "replacement.png" ], filenames
   end
 end
