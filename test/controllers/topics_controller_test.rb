@@ -22,6 +22,17 @@ class TopicsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "shows the due note count and review link" do
+    @user.notes.update_all(next_review_at: 1.hour.ago)
+    sign_in @user
+
+    get topics_url
+
+    assert_select "a[href=?]",
+      review_path,
+      text: "복습 #{@user.notes.due.count}개"
+  end
+
   test "creates a topic owned by the signed-in user" do
     sign_in @user
 

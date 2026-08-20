@@ -41,12 +41,20 @@
       </p>
 
       <p class="mt-2 text-5xl font-bold text-slate-900">
-        0
+        <%= @due_note_count %>
       </p>
 
       <p class="mt-3 text-slate-600">
-        아직 복습할 메모가 없습니다.
+        <% if @due_note_count.positive? %>
+          지금 복습할 메모가 있습니다.
+        <% else %>
+          지금 복습할 메모가 없습니다.
+        <% end %>
       </p>
+
+      <%= link_to "복습 시작",
+            review_path,
+            class: "mt-5 inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
     </section>
 
     <section class="mt-6 rounded-2xl bg-white p-8 text-left shadow-sm">

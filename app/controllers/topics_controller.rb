@@ -4,6 +4,7 @@ class TopicsController < ApplicationController
 
   def index
     @topics = current_user.topics.order(:name)
+    @due_note_count = current_user.notes.due.count
   end
 
   def new

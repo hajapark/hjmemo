@@ -26,4 +26,15 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
     assert_select "p", text: /#{user.topics.count}개/
     assert_select "a[href=?]", topics_path, text: "주제 관리하기"
   end
+
+  test "shows the signed-in user's due note count and review link" do
+    user = users(:one)
+    user.notes.update_all(next_review_at: 1.hour.ago)
+    sign_in user
+
+    get root_url
+
+    assert_select "p", text: user.notes.due.count.to_s
+    assert_select "a[href=?]", review_path, text: "복습 시작"
+  end
 end
