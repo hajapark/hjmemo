@@ -12,6 +12,7 @@ class ReviewsController < ApplicationController
       .first
 
     @review_delays = review_delays_for(@note)
+    @next_review_at = current_user.notes.minimum(:next_review_at) unless @note
   end
 
   def update

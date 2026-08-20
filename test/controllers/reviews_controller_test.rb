@@ -59,14 +59,35 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "shows an empty state when no note is due" do
-    @user.notes.update_all(next_review_at: 1.day.from_now)
+    next_review_at = Time.zone.local(2026, 8, 21, 15, 0)
 
-    sign_in @user
+    travel_to Time.zone.local(2026, 8, 20, 15, 0) do
+      @user.notes.update_all(next_review_at: next_review_at)
+
+      sign_in @user
+      get review_url
+
+      assert_response :success
+      assert_select "p", text: "남은 복습 0개"
+      assert_select "p", text: "지금 복습할 메모가 없습니다."
+      assert_select "time[datetime=?]",
+        next_review_at.iso8601,
+        text: "2026년 8월 21일 15:00"
+    end
+  end
+
+  test "invites a user without notes to create one" do
+    user = User.create!(
+      email: "new-reviewer@example.com",
+      password: "password123"
+    )
+    sign_in user
+
     get review_url
 
     assert_response :success
-    assert_select "p", text: "남은 복습 0개"
-    assert_select "p", text: "지금 복습할 메모가 없습니다."
+    assert_select "time", count: 0
+    assert_select "a[href=?]", topics_path, text: "메모 만들러 가기"
   end
 
   test "saves a review rating and redirects to the next review" do
