@@ -50,41 +50,49 @@
               </p>
 
               <div class="grid gap-3 sm:grid-cols-4">
-                <%= button_to "다시",
-                      review_path,
+                <%= button_to review_path,
                       method: :patch,
                       params: {
                         note_id: @note.id,
                         rating: "again"
                       },
-                      class: "w-full rounded-lg bg-red-100 px-4 py-3 font-medium text-red-700 hover:bg-red-200" %>
+                      class: "flex w-full flex-col rounded-lg bg-red-100 px-4 py-3 font-medium text-red-700 hover:bg-red-200" do %>
+                  <span>다시</span>
+                  <span class="mt-1 text-xs"><%= review_delay_label(@review_delays.fetch(:again)) %></span>
+                <% end %>
 
-                <%= button_to "어려움",
-                      review_path,
+                <%= button_to review_path,
                       method: :patch,
                       params: {
                         note_id: @note.id,
                         rating: "hard"
                       },
-                      class: "w-full rounded-lg bg-amber-100 px-4 py-3 font-medium text-amber-700 hover:bg-amber-200" %>
+                      class: "flex w-full flex-col rounded-lg bg-amber-100 px-4 py-3 font-medium text-amber-700 hover:bg-amber-200" do %>
+                  <span>어려움</span>
+                  <span class="mt-1 text-xs"><%= review_delay_label(@review_delays.fetch(:hard)) %></span>
+                <% end %>
 
-                <%= button_to "좋음",
-                      review_path,
+                <%= button_to review_path,
                       method: :patch,
                       params: {
                         note_id: @note.id,
                         rating: "good"
                       },
-                      class: "w-full rounded-lg bg-indigo-600 px-4 py-3 font-medium text-white hover:bg-indigo-500" %>
+                      class: "flex w-full flex-col rounded-lg bg-indigo-600 px-4 py-3 font-medium text-white hover:bg-indigo-500" do %>
+                  <span>좋음</span>
+                  <span class="mt-1 text-xs"><%= review_delay_label(@review_delays.fetch(:good)) %></span>
+                <% end %>
 
-                <%= button_to "쉬움",
-                      review_path,
+                <%= button_to review_path,
                       method: :patch,
                       params: {
                         note_id: @note.id,
                         rating: "easy"
                       },
-                      class: "w-full rounded-lg bg-emerald-100 px-4 py-3 font-medium text-emerald-700 hover:bg-emerald-200" %>
+                      class: "flex w-full flex-col rounded-lg bg-emerald-100 px-4 py-3 font-medium text-emerald-700 hover:bg-emerald-200" do %>
+                  <span>쉬움</span>
+                  <span class="mt-1 text-xs"><%= review_delay_label(@review_delays.fetch(:easy)) %></span>
+                <% end %>
               </div>
             </div>
           </div>

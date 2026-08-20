@@ -35,6 +35,15 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h2", text: "다른 사용자의 질문", count: 0
   end
 
+  test "shows the next review delay on each rating button" do
+    sign_in @user
+    get review_url
+
+    assert_response :success
+    assert_select "button span", text: "10분", count: 1
+    assert_select "button span", text: "1일", count: 3
+  end
+
   test "shows the remaining due note count" do
     @note.topic.notes.create!(
       question: "두 번째 질문",

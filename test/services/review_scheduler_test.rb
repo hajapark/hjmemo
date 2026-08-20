@@ -108,6 +108,17 @@ class ReviewSchedulerTest < ActiveSupport::TestCase
     assert_equal @reviewed_at + 39.days, @note.next_review_at
   end
 
+  test "previews each delay without changing the note" do
+    original_attributes = @note.attributes
+
+    assert_equal 10.minutes, preview(:again)
+    assert_equal 35.days, preview(:hard)
+    assert_equal 38.days, preview(:good)
+    assert_equal 39.days, preview(:easy)
+
+    assert_equal original_attributes, @note.reload.attributes
+  end
+
   private
 
   def schedule(rating)
@@ -116,5 +127,13 @@ class ReviewSchedulerTest < ActiveSupport::TestCase
       rating: rating,
       reviewed_at: @reviewed_at
     ).call
+  end
+
+  def preview(rating)
+    ReviewScheduler.new(
+      note: @note,
+      rating: rating,
+      reviewed_at: @reviewed_at
+    ).next_review_delay
   end
 end

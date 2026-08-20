@@ -10,6 +10,8 @@ class ReviewsController < ApplicationController
       .with_attached_answer_images
       .order(:next_review_at, :id)
       .first
+
+    @review_delays = review_delays_for(@note)
   end
 
   def update
@@ -23,5 +25,20 @@ class ReviewsController < ApplicationController
     redirect_to review_path, notice: "복습 결과가 저장되었습니다."
   rescue ArgumentError => error
     redirect_to review_path, alert: error.message
+  end
+
+  private
+
+  def review_delays_for(note)
+    return {} unless note
+
+    ReviewScheduler::RATINGS.keys.to_h do |rating|
+      delay = ReviewScheduler.new(
+        note: note,
+        rating: rating
+      ).next_review_delay
+
+      [rating, delay]
+    end
   end
 end

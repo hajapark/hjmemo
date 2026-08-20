@@ -24,6 +24,16 @@ class ReviewScheduler
     end
   end
 
+  def next_review_delay
+    validate_rating!
+
+    if rating == :again
+      AGAIN_DELAY
+    else
+      success_schedule.fetch(:review_interval_days).days
+    end
+  end
+
   private
 
   attr_reader :note, :rating, :reviewed_at
@@ -47,22 +57,31 @@ class ReviewScheduler
   end
 
   def schedule_success
-    new_repetitions = note.repetitions + 1
-    new_ease_factor = adjusted_ease_factor
-    new_interval = next_interval(
-      repetitions: new_repetitions,
-      ease_factor: new_ease_factor
-    )
+    schedule = success_schedule
 
     note.update!(
-      repetitions: new_repetitions,
-      review_interval_days: new_interval,
-      ease_factor: new_ease_factor,
+      repetitions: schedule.fetch(:repetitions),
+      review_interval_days: schedule.fetch(:review_interval_days),
+      ease_factor: schedule.fetch(:ease_factor),
       last_reviewed_at: reviewed_at,
-      next_review_at: reviewed_at + new_interval.days
+      next_review_at: reviewed_at + schedule.fetch(:review_interval_days).days
     )
 
     note
+  end
+
+  def success_schedule
+    new_repetitions = note.repetitions + 1
+    new_ease_factor = adjusted_ease_factor
+
+    {
+      repetitions: new_repetitions,
+      review_interval_days: next_interval(
+        repetitions: new_repetitions,
+        ease_factor: new_ease_factor
+      ),
+      ease_factor: new_ease_factor
+    }
   end
 
   def next_interval(repetitions:, ease_factor:)
