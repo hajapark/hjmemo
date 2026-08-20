@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_20_131821) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_20_141214) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,10 +45,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_20_131821) do
   create_table "notes", force: :cascade do |t|
     t.text "answer", null: false
     t.datetime "created_at", null: false
+    t.decimal "ease_factor", precision: 4, scale: 2, default: "2.5", null: false
+    t.datetime "last_reviewed_at"
+    t.datetime "next_review_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.text "question", null: false
+    t.integer "repetitions", default: 0, null: false
+    t.integer "review_interval_days", default: 0, null: false
     t.bigint "topic_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["next_review_at"], name: "index_notes_on_next_review_at"
     t.index ["topic_id"], name: "index_notes_on_topic_id"
+    t.check_constraint "ease_factor >= 1.3", name: "notes_ease_factor_minimum"
+    t.check_constraint "repetitions >= 0", name: "notes_repetitions_non_negative"
+    t.check_constraint "review_interval_days >= 0", name: "notes_review_interval_days_non_negative"
   end
 
   create_table "topics", force: :cascade do |t|

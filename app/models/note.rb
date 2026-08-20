@@ -6,14 +6,38 @@ class Note < ApplicationRecord
     image/png
     image/webp
   ].freeze
+  MINIMUM_EASE_FACTOR = 1.3
 
   belongs_to :topic
 
   has_many_attached :answer_images
 
+  attribute :next_review_at, :datetime, default: -> { Time.current }
+
+  scope :due, -> { where(next_review_at: ..Time.current) }
+
   validates :question, presence: true
   validates :answer, presence: true
   validate :acceptable_answer_images
+
+  validates :next_review_at, presence: true
+
+  validates :review_interval_days,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 0
+            }
+
+  validates :repetitions,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 0
+            }
+
+  validates :ease_factor,
+            numericality: {
+              greater_than_or_equal_to: MINIMUM_EASE_FACTOR
+            }
 
   private
 

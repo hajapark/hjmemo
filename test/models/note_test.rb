@@ -94,4 +94,63 @@ class NoteTest < ActiveSupport::TestCase
       "는 최대 5개까지 첨부할 수 있습니다."
     )
   end
+
+  test "uses default review scheduling values for a new note" do
+    travel_to Time.zone.local(2026, 8, 20, 15, 0, 0) do
+      note = @note.topic.notes.build(
+        question: "New question",
+        answer: "New answer"
+      )
+
+      assert_equal Time.current, note.next_review_at
+      assert_nil note.last_reviewed_at
+      assert_equal 0, note.review_interval_days
+      assert_equal 0, note.repetitions
+      assert_equal BigDecimal("2.5"), note.ease_factor
+    end
+  end
+
+  test "due includes notes scheduled now or earlier" do
+    due_note = @note.topic.notes.create!(
+      question: "Due question",
+      answer: "Due answer",
+      next_review_at: 1.hour.ago
+    )
+    future_note = @note.topic.notes.create!(
+      question: "Future question",
+      answer: "Future answer",
+      next_review_at: 1.hour.from_now
+    )
+
+    assert_includes Note.due, due_note
+    assert_not_includes Note.due, future_note
+  end
+
+  test "requires a next review time" do
+    @note.next_review_at = nil
+
+    assert_not @note.valid?
+    assert @note.errors.added?(:next_review_at, :blank)
+  end
+
+  test "rejects a negative review interval" do
+    @note.review_interval_days = -1
+
+    assert_not @note.valid?
+    assert_not_empty @note.errors[:review_interval_days]
+  end
+
+  test "rejects negative repetitions" do
+    @note.repetitions = -1
+
+    assert_not @note.valid?
+    assert_not_empty @note.errors[:repetitions]
+  end
+
+  test "rejects an ease factor below the minimum" do
+    @note.ease_factor = Note::MINIMUM_EASE_FACTOR - 0.01
+
+    assert_not @note.valid?
+    assert_not_empty @note.errors[:ease_factor]
+  end
 end
