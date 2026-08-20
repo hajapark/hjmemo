@@ -16,4 +16,14 @@ class HomeControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
   end
+
+  test "shows the signed-in user's topic count and link" do
+    user = users(:one)
+    sign_in user
+
+    get root_url
+
+    assert_select "p", text: /#{user.topics.count}개/
+    assert_select "a[href=?]", topics_path, text: "주제 관리하기"
+  end
 end

@@ -9,8 +9,7 @@
         <%= button_to "로그아웃",
               destroy_user_session_path,
               method: :delete,
-              class: "rounded-lg bg-slate-900 px-4 py-2 font-medium text-white hover:bg-slate-
-              700" %>
+              class: "rounded-lg bg-slate-900 px-4 py-2 font-medium text-white hover:bg-slate-700" %>
       <% else %>
         <%= link_to "로그인",
               new_user_session_path,
@@ -18,8 +17,7 @@
 
         <%= link_to "회원가입",
               new_user_registration_path,
-              class: "rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-
-              indigo-500" %>
+              class: "rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
       <% end %>
     </nav>
 
@@ -49,6 +47,20 @@
       <p class="mt-3 text-slate-600">
         아직 복습할 메모가 없습니다.
       </p>
+    </section>
+
+    <section class="mt-6 rounded-2xl bg-white p-8 text-left shadow-sm">
+      <p class="text-sm font-medium text-slate-500">
+        나의 주제
+      </p>
+
+      <p class="mt-2 text-3xl font-bold text-slate-900">
+        <%= @topic_count %>개
+      </p>
+
+      <%= link_to "주제 관리하기",
+            topics_path,
+            class: "mt-5 inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
     </section>
   </div>
 </main>

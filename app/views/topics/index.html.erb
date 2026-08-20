@@ -1,0 +1,45 @@
+<main class="min-h-screen bg-slate-50 px-6 py-12">
+  <div class="mx-auto max-w-3xl">
+    <%= link_to "← 홈",
+          root_path,
+          class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+
+    <header class="mb-8 mt-6 flex items-end justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-900">
+          주제
+        </h1>
+
+        <p class="mt-2 text-slate-600">
+          <%= @topics.size %>개의 주제가 있습니다.
+        </p>
+      </div>
+
+      <%= link_to "새 주제",
+            new_topic_path,
+            class: "rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
+    </header>
+
+    <% if @topics.any? %>
+      <div class="space-y-3">
+        <% @topics.each do |topic| %>
+          <article class="rounded-2xl bg-white p-6 shadow-sm">
+            <h2 class="text-lg font-semibold text-slate-900">
+              <%= topic.name %>
+            </h2>
+          </article>
+        <% end %>
+      </div>
+    <% else %>
+      <section class="rounded-2xl bg-white p-10 text-center shadow-sm">
+        <p class="text-slate-600">
+          아직 만든 주제가 없습니다.
+        </p>
+
+        <%= link_to "첫 주제 만들기",
+              new_topic_path,
+              class: "mt-5 inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
+      </section>
+    <% end %>
+  </div>
+</main>
