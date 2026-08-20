@@ -23,10 +23,26 @@
     <% if @topics.any? %>
       <div class="space-y-3">
         <% @topics.each do |topic| %>
-          <article class="rounded-2xl bg-white p-6 shadow-sm">
+          <article class="flex items-center justify-between gap-4 rounded-2xl bg-white p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-slate-900">
               <%= topic.name %>
             </h2>
+
+            <div class="flex items-center gap-2">
+              <%= link_to "수정",
+                    edit_topic_path(topic),
+                    class: "rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100" %>
+
+              <%= button_to "삭제",
+                    topic_path(topic),
+                    method: :delete,
+                    form: {
+                      data: {
+                        turbo_confirm: "정말 이 주제를 삭제하시겠습니까?"
+                      }
+                    },
+                    class: "rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50" %>
+            </div>
           </article>
         <% end %>
       </div>

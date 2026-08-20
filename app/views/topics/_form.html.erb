@@ -32,8 +32,9 @@
           topics_path,
           class: "rounded-lg px-4 py-2 font-medium text-slate-600 hover:bg-slate-100" %>
 
-    <%= form.submit "주제 만들기",
-          class: "cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white
-          hover:bg-indigo-500" %>
+    <%= form.submit(
+          topic.persisted? ? "주제 수정하기" : "주제 만들기",
+          class: "cursor-pointer rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500"
+        ) %>
   </div>
 <% end %>

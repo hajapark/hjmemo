@@ -1,0 +1,21 @@
+<main class="min-h-screen bg-slate-50 px-6 py-12">
+  <div class="mx-auto max-w-xl">
+    <%= link_to "← 주제 목록",
+          topics_path,
+          class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+
+    <header class="mb-8 mt-6">
+      <h1 class="text-3xl font-bold text-slate-900">
+        주제 수정
+      </h1>
+
+      <p class="mt-2 text-slate-600">
+        주제 이름을 변경하세요.
+      </p>
+    </header>
+
+    <section class="rounded-2xl bg-white p-8 shadow-sm">
+      <%= render "form", topic: @topic %>
+    </section>
+  </div>
+</main>
