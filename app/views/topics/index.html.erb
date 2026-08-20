@@ -25,7 +25,9 @@
         <% @topics.each do |topic| %>
           <article class="flex items-center justify-between gap-4 rounded-2xl bg-white p-6 shadow-sm">
             <h2 class="text-lg font-semibold text-slate-900">
-              <%= topic.name %>
+              <%= link_to topic.name,
+                    topic_notes_path(topic),
+                    class: "hover:text-indigo-600" %>
             </h2>
 
             <div class="flex items-center gap-2">

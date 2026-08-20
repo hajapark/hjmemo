@@ -1,0 +1,25 @@
+<main class="min-h-screen bg-slate-50 px-6 py-12">
+  <div class="mx-auto max-w-2xl">
+    <%= link_to "← 메모 목록",
+          topic_notes_path(@topic),
+          class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+
+    <header class="mb-8 mt-6">
+      <p class="text-sm font-semibold text-indigo-600">
+        <%= @topic.name %>
+      </p>
+
+      <h1 class="mt-2 text-3xl font-bold text-slate-900">
+        새 메모
+      </h1>
+
+      <p class="mt-2 text-slate-600">
+        질문과 답변을 작성하고 필요한 이미지를 답변에 첨부하세요.
+      </p>
+    </header>
+
+    <section class="rounded-2xl bg-white p-8 shadow-sm">
+      <%= render "form", topic: @topic, note: @note %>
+    </section>
+  </div>
+</main>

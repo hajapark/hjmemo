@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   get "home/index"
   root "home#index"
 
-  resources :topics, only: %i[index new create edit update destroy]
+  resources :topics, only: %i[index new create edit update destroy] do
+    resources :notes, only: %i[index new create]
+  end
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

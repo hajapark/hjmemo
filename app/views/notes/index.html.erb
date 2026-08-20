@@ -1,0 +1,69 @@
+<main class="min-h-screen bg-slate-50 px-6 py-12">
+  <div class="mx-auto max-w-3xl">
+    <%= link_to "← 주제 목록",
+          topics_path,
+          class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+
+    <header class="mb-8 mt-6 flex items-end justify-between gap-4">
+      <div>
+        <p class="text-sm font-semibold text-indigo-600">
+          <%= @topic.name %>
+        </p>
+
+        <h1 class="mt-2 text-3xl font-bold text-slate-900">
+          메모
+        </h1>
+
+        <p class="mt-2 text-slate-600">
+          <%= @notes.size %>개의 메모가 있습니다.
+        </p>
+      </div>
+
+      <%= link_to "새 메모",
+            new_topic_note_path(@topic),
+            class: "rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
+    </header>
+
+    <% if @notes.any? %>
+      <div class="space-y-4">
+        <% @notes.each do |note| %>
+          <article class="rounded-2xl bg-white p-6 shadow-sm">
+            <p class="text-sm font-medium text-indigo-600">
+              질문
+            </p>
+
+            <h2 class="mt-2 whitespace-pre-wrap text-lg font-semibold text-slate-900"><%= note.question %></h2>
+
+            <div class="mt-6 border-t border-slate-100 pt-6">
+              <p class="text-sm font-medium text-slate-500">
+                답변
+              </p>
+
+              <p class="mt-2 whitespace-pre-wrap text-slate-700"><%= note.answer %></p>
+
+              <% if note.answer_images.attached? %>
+                <div class="mt-5 grid gap-4 sm:grid-cols-2">
+                  <% note.answer_images.each do |image| %>
+                    <%= image_tag image,
+                          alt: "답변 첨부 이미지",
+                          class: "w-full rounded-xl border border-slate-200 object-contain" %>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    <% else %>
+      <section class="rounded-2xl bg-white p-10 text-center shadow-sm">
+        <p class="text-slate-600">
+          아직 만든 메모가 없습니다.
+        </p>
+
+        <%= link_to "첫 메모 만들기",
+              new_topic_note_path(@topic),
+              class: "mt-5 inline-block rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-500" %>
+      </section>
+    <% end %>
+  </div>
+</main>
