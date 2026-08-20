@@ -4,10 +4,14 @@
           topics_path,
           class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
 
-    <header class="mb-8 mt-6">
+    <header class="mb-8 mt-6 flex items-end justify-between gap-4">
       <h1 class="text-3xl font-bold text-slate-900">
         오늘의 복습
       </h1>
+
+      <p class="rounded-full bg-indigo-100 px-4 py-2 text-sm font-semibold text-indigo-700">
+        남은 복습 <%= @remaining_review_count %>개
+      </p>
     </header>
 
     <% if @note %>

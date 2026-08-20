@@ -35,6 +35,20 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h2", text: "다른 사용자의 질문", count: 0
   end
 
+  test "shows the remaining due note count" do
+    @note.topic.notes.create!(
+      question: "두 번째 질문",
+      answer: "두 번째 답변",
+      next_review_at: 30.minutes.ago
+    )
+
+    sign_in @user
+    get review_url
+
+    assert_response :success
+    assert_select "p", text: "남은 복습 2개"
+  end
+
   test "shows an empty state when no note is due" do
     @user.notes.update_all(next_review_at: 1.day.from_now)
 
@@ -42,6 +56,7 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
     get review_url
 
     assert_response :success
+    assert_select "p", text: "남은 복습 0개"
     assert_select "p", text: "지금 복습할 메모가 없습니다."
   end
 
