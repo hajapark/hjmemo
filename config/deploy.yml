@@ -7,7 +7,7 @@ image: hjmemo
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
+    - 13.209.81.96
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -40,9 +40,12 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
+    - HJMEMO_DATABASE_PASSWORD
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
+    HJMEMO_DATABASE_HOST: hjmemo-postgres.cxq6o404kbv1.ap-northeast-2.rds.amazonaws.com
+    HJMEMO_DATABASE_PORT: 5432
     SOLID_QUEUE_IN_PUMA: true
 
     # Set number of processes dedicated to Solid Queue (default: 1)
@@ -78,7 +81,7 @@ asset_path: /rails/public/assets
 
 # Configure the image builder.
 builder:
-  arch: amd64
+  arch: arm64
 
   # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
   # remote: ssh://docker@docker-builder-server
@@ -93,6 +96,11 @@ builder:
 # Use a different ssh user than root
 # ssh:
 #   user: app
+ssh:
+  user: ec2-user
+  keys:
+    - "~/.ssh/hjmemo-deploy-key.pem"
+  keys_only: true
 
 # Use accessory services (secrets come from .kamal/secrets).
 # accessories:

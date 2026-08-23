@@ -90,6 +90,8 @@ production:
     database: hjmemo_production
     username: hjmemo
     password: <%= ENV["HJMEMO_DATABASE_PASSWORD"] %>
+    host: <%= ENV["HJMEMO_DATABASE_HOST"] %>
+    port: <%= ENV.fetch("HJMEMO_DATABASE_PORT", 5432) %>
   cache:
     <<: *primary_production
     database: hjmemo_production_cache
