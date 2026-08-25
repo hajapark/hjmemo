@@ -6,13 +6,11 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-# Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
-# amazon:
-#   service: S3
-#   access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
-#   secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
-#   region: us-east-1
-#   bucket: your_own_bucket-<%= Rails.env %>
+# Production EC2 uses temporary AWS credentials from its attached IAM role.
+amazon:
+  service: S3
+  region: ap-northeast-2
+  bucket: hjmemo-production-520728855438-ap-northeast-2-an
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
